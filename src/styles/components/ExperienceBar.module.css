@@ -1,0 +1,34 @@
+
+.experienceBar {
+  display: flex;
+  align-items: center;
+}
+
+.experienceBar span {
+font-size: .8rem;
+}
+
+/* seleciona o primeiro níveo de filho */
+.experienceBar > div {
+  /* ocupa a largura máxima do container */
+  flex: 1; 
+  height: 4px;
+  border-radius: 4px;
+  background-color: var(--gray-line);
+  margin: 0 1.5rem;
+  /* dentro dela terão divs com position absolute */
+  position: relative;
+}
+
+.experienceBar > div > div {
+  height: 4px;
+  border-radius: 4px;
+  background-color: var(--green);
+}
+
+span.currentExperience {
+  position: absolute;
+  top: 12px;
+  /* alinhar o centro do elemento na ancora */
+  transform: translateX(-50%);
+}
