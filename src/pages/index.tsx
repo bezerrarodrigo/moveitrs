@@ -9,6 +9,7 @@ import { Profile } from "../components/Profile";
 
 
 import styles from '../styles/pages/Home.module.css';
+import { CountdownProvider } from '../contexts/CountdownContext';
 
 export default function Home() {
   return (
@@ -17,16 +18,22 @@ export default function Home() {
         <title>Início | move.it</title>
       </Head>
       <ExperienceBar />
-      <section>
-        <div>
-          <Profile />
-          <CompleteChallenge />
-          <Countdown />
-        </div>
-        <div>
-          <ChallengeBox />
-        </div>
-      </section>
+
+      {/* Importando neste lugar e não no _app.js pois não será
+      compartilhado com todas as telas.
+       */}
+      <CountdownProvider>
+        <section>
+          <div>
+            <Profile />
+            <CompleteChallenge />
+            <Countdown />
+          </div>
+          <div>
+            <ChallengeBox />
+          </div>
+        </section>
+      </CountdownProvider>
     </div>
   )
 }
