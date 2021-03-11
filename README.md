@@ -1,5 +1,6 @@
 # moveitrs
-Project developed during the Rocketseat Next Level week event.
+Project developed during the Rocketseat Next Level week event.\
+Pomodoro style counter reminding the user at each interval to practice gymnastics at work.
 
 ## Screen
 ![Print Screen](/public/screen.png)
