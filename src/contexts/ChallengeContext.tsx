@@ -1,10 +1,18 @@
 import {createContext, useState, ReactNode, useEffect} from 'react';
 
+// lib para gravar storage nos cookies do navegador
+import Cookies from 'js-cookie';
+
+
 // todos os desafios armazenados dentro deste array
 import challenges from '../../challenges.json';
+import {LevelUpModal} from "../components/LevelUpModal";
 
 type challengesProviderProps = {
     children: ReactNode;
+    level: number;
+    currentExperience: number;
+    challengesCompleted: number;
 }
 
 type challenge = {
@@ -24,18 +32,24 @@ type challengesContextData = {
     levelUp: () => void;
     resetChallenge: () => void;
     completeChallenge: () => void;
+    closeModal: () => void;
 }
 
+// criando o context para ser compartilhado
 export const ChallengesContext = createContext({} as challengesContextData);
 
-export function ChallengesProvider({children}: challengesProviderProps) {
+// componente deverá ser usada no _app. para compartilhar seus dados com toda a aplicação
+export function ChallengesProvider({children, ...rest}: challengesProviderProps) {
 
-    // informações que queremos armazenar
-    const [level, setLevel] = useState(1);
-    const [currentExperience, setCurrentExperience] = useState(0);
-    const [challengesComplete, setChallengesComplete] = useState(0);
+    // informações que queremos armazenar e disponibilizar para os demais componentes da aplicação
+    const [level, setLevel] = useState(rest.level ?? 1);
+    const [currentExperience, setCurrentExperience] = useState(rest.currentExperience ?? 0);
+    const [challengesComplete, setChallengesComplete] = useState(rest.challengesCompleted ?? 0);
+    const [showModal, setShowModal] = useState(false)
+
     const [activeChallenge, setActiveChallenge] = useState(null);
 
+    // calculo criado para gerar regra de pontuação para próximo nível
     const experienceToNextLevel = Math.pow((level + 1) * 4, 2);
 
     //api navegador - permitir notificações
@@ -43,9 +57,18 @@ export function ChallengesProvider({children}: challengesProviderProps) {
         Notification.requestPermission();
     }, [])
 
+    // local storage com cookies
+    useEffect(() => {
+        Cookies.set('level', String(level));
+        Cookies.set('currentExperience', String(currentExperience));
+        Cookies.set('challengesComplete', String(challengesComplete));
+    }, [level, currentExperience, challengesComplete])
 
+
+    // deve-se monstrar o Modal de aumento de level
     function levelUp() {
         setLevel(level + 1);
+        setShowModal(true)
     }
 
     function startNewChallenge() {
@@ -55,8 +78,8 @@ export function ChallengesProvider({children}: challengesProviderProps) {
 
         setActiveChallenge(challenge);
 
-        //api do navegador
-        new Audio('/notification.mp3').play();
+        //api do navegador - audio de notificação
+        // new Audio('/notification.mp3').play();
 
         // api do navegador
         if (Notification.permission === 'granted') {
@@ -96,6 +119,10 @@ export function ChallengesProvider({children}: challengesProviderProps) {
 
     }
 
+    function closeModal() {
+        setShowModal(false);
+    }
+
     return (
         <ChallengesContext.Provider value={{
             level: level,
@@ -106,9 +133,15 @@ export function ChallengesProvider({children}: challengesProviderProps) {
             activeChallenge,
             resetChallenge,
             experienceToNextLevel,
-            completeChallenge
+            completeChallenge,
+            closeModal
         }}>
+            {/*o que estiver envolvido por este context terá acesso a todas as propriedades e funções*/}
             {children}
+            {/*{showModal ? <LevelUpModal/> : null }*/}
+            {showModal && <LevelUpModal/>}
+
+
         </ChallengesContext.Provider>
     )
 }
