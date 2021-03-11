@@ -2,8 +2,7 @@
 Project developed during the Rocketseat Next Level week event.
 
 ## Screen
-![Screen](/public/screen.png)
-Format: ![Alt Text](url)
+(/public/screen.png)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
