@@ -1,6 +1,6 @@
 # moveitrs
 Project developed during the Rocketseat Next Level week event.\
-Pomodoro style counter reminding the user at each interval to practice gymnastics at work.
+Pomodoro style counter reminding the user at each interval to practice gymnastics at work. With the emphasis on gamification as an incentive.
 
 ## Screen
 ![Print Screen](/public/screen.png)
